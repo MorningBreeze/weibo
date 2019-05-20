@@ -15,7 +15,7 @@ class SessionsController extends Controller
            'email'=>'required|email|max:255',
            'password'=>'required'
         ]);
-        if (Auth::attempt($credential)){
+        if (Auth::attempt($credential,$request->has('remember'))){
             //登录成功后的相关操作
             session()->flash('success','欢迎回来!');
             return redirect()->route('users.show',[Auth::user()]);
