@@ -25,4 +25,10 @@ class SessionsController extends Controller
             //登录失败后的相关操作
         }
     }
+    public function destroy(){
+        Auth::logout();
+        session()->flash('success','您已成功退出');
+        return redirect('login');
+
+    }
 }
