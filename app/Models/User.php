@@ -61,4 +61,42 @@ class User extends Authenticatable
             ->orderBy('created_at','desc');
     }
 
+    public function followers(){
+        return $this->belongsToMany(User::class,'followers','user_id','follower_id');
+    }
+    public function followings(){
+        return $this->belongsToMany(User::class,'followers','follower_id','user_id');
+    }
+
+
+    public function follow($user_ids){
+        if (!is_array($user_ids)){
+            $user_ids=compact('user_ids');
+        }
+        $this->followings()->sync($user_ids,false);
+    }
+
+    public function unfollow($user_ids){
+        if (!is_array($user_ids)){
+            $user_ids =compact('user_ids');
+        }
+        $this->followings()->detach($user_ids);
+    }
+
+    /**
+     * @param $user_id
+     * @return mixed
+     * // 1. 返回的是一个 HasMany 对象
+    $this->followings()
+    // 2. 返回的是一个 Collection 集合
+    $this->followings
+    // 3. 第2个其实相当于这样
+    $this->followings()->get()
+    // 如果不需要条件直接使用 2 那样，写起来更短
+     *
+     */
+    public function isFollowing($user_id){
+        return $this->followings->contains($user_id);
+    }
+
 }
